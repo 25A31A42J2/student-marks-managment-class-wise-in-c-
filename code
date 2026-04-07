@@ -1,0 +1,127 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Student {
+public:
+    string name;
+    int roll;
+    vector<int> marks;
+
+    void input(int subjects) {
+        cout << "Enter name: ";
+        cin >> name;
+        cout << "Enter roll number: ";
+        cin >> roll;
+
+        marks.resize(subjects);
+        cout << "Enter marks for " << subjects << " subjects:\n";
+        for (int i = 0; i < subjects; i++) {
+            cout << "Subject " << i + 1 << ": ";
+            cin >> marks[i];
+        }
+    }
+
+    void display() {
+        cout << "Name: " << name << ", Roll: " << roll << "\nMarks: ";
+        int total = 0;
+        for (int m : marks) {
+            cout << m << " ";
+            total += m;
+        }
+        float avg = (float)total / marks.size();
+        cout << "\nAverage: " << avg << "\n";
+    }
+};
+
+class ClassRoom {
+public:
+    string className;
+    vector<Student> students;
+    int subjects;
+
+    void createClass() {
+        cout << "Enter class name: ";
+        cin >> className;
+        cout << "Enter number of subjects: ";
+        cin >> subjects;
+    }
+
+    void addStudent() {
+        Student s;
+        s.input(subjects);
+        students.push_back(s);
+    }
+
+    void displayStudents() {
+        cout << "\nClass: " << className << "\n";
+        for (auto &s : students) {
+            cout << "------------------\n";
+            s.display();
+        }
+    }
+};
+
+int main() {
+    vector<ClassRoom> classes;
+    int choice;
+
+    while (true) {
+        cout << "\n===== Student Marks Management =====\n";
+        cout << "1. Create Class\n";
+        cout << "2. Add Student to Class\n";
+        cout << "3. Display Class Students\n";
+        cout << "4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            ClassRoom c;
+            c.createClass();
+            classes.push_back(c);
+        }
+        else if (choice == 2) {
+            if (classes.empty()) {
+                cout << "No classes available!\n";
+                continue;
+            }
+            cout << "Select class index:\n";
+            for (int i = 0; i < classes.size(); i++) {
+                cout << i << ". " << classes[i].className << endl;
+            }
+            int idx;
+            cin >> idx;
+            if (idx >= 0 && idx < classes.size()) {
+                classes[idx].addStudent();
+            } else {
+                cout << "Invalid class index!\n";
+            }
+        }
+        else if (choice == 3) {
+            if (classes.empty()) {
+                cout << "No classes available!\n";
+                continue;
+            }
+            cout << "Select class index:\n";
+            for (int i = 0; i < classes.size(); i++) {
+                cout << i << ". " << classes[i].className << endl;
+            }
+            int idx;
+            cin >> idx;
+            if (idx >= 0 && idx < classes.size()) {
+                classes[idx].displayStudents();
+            } else {
+                cout << "Invalid class index!\n";
+            }
+        }
+        else if (choice == 4) {
+            break;
+        }
+        else {
+            cout << "Invalid choice!\n";
+        }
+    }
+
+    return 0;
+}
